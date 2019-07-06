@@ -11,9 +11,13 @@ import com.twitter.hbc.httpclient.BasicClient
 import com.twitter.hbc.httpclient.auth.OAuth1
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, ProducerRecord}
 import org.apache.kafka.common.serialization.StringSerializer
-import org.elasticsearch.index.mapper.BooleanFieldMapper
 import org.slf4j.LoggerFactory
 
+/** This is just an example kafka producer app.
+  * Note that there are also Twitter source connectors for Kafka, which doesn't require
+  * a single line of code to pull data from Twitter into Kafka.
+  * For example you can use [[https://github.com/jcustenborder/kafka-connect-twitter]]
+  */
 object TwitterProducerApp extends App {
 
   val log = LoggerFactory.getLogger("producer-app")

@@ -16,7 +16,10 @@ import org.slf4j.LoggerFactory
 import scala.collection.JavaConverters
 
 
-/** You can check the result at [[http://localhost:9200/tweets/]].
+/** This is an example kafka consumer app. Please note that Kafka has connectors
+  * for the Elastic Search, which enables integration without
+  * a single line of code to push data to Elastic Search from Kafka.
+  * You can check the result of an app via Kafka rest API: [[http://localhost:9200/tweets/]].
   * All the indices are at [[http://localhost:9200/_cat/indices?v]].
   */
 object ElasticConsumerApp extends App with Runnable with ActionListener[IndexResponse] {
