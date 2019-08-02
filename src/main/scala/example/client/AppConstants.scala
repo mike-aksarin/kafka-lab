@@ -1,3 +1,5 @@
+package example.client
+
 import java.time.Duration
 
 object AppConstants {

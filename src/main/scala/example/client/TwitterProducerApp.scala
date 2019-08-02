@@ -1,3 +1,5 @@
+package example.client
+
 import java.util.Properties
 import java.util.concurrent.{LinkedBlockingQueue, TimeUnit}
 
@@ -68,7 +70,7 @@ object TwitterProducerApp extends App {
   private def createTwitterEndpoint(): StatusesFilterEndpoint = {
     val hosebirdEndpoint = new StatusesFilterEndpoint()
     // Optional: set up some followings and track terms
-    val terms = Lists.newArrayList("eirene", "peace")
+    val terms = Lists.newArrayList("scala", "kafka")
     val followings = Lists.newArrayList(java.lang.Long.valueOf(2981206113L))
     hosebirdEndpoint.followings(followings)
     hosebirdEndpoint.trackTerms(terms)

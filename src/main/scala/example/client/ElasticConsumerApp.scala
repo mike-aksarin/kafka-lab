@@ -1,3 +1,5 @@
+package example.client
+
 import java.util
 import java.util.Properties
 import java.util.concurrent.CountDownLatch
@@ -6,9 +8,9 @@ import org.apache.http.HttpHost
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecords, KafkaConsumer}
 import org.apache.kafka.common.errors.WakeupException
 import org.apache.kafka.common.serialization.StringDeserializer
+import org.elasticsearch.action.DocWriteRequest
 import org.elasticsearch.action.bulk.{BulkRequest, BulkResponse}
-import org.elasticsearch.action.{ActionListener, DocWriteRequest}
-import org.elasticsearch.action.index.{IndexRequest, IndexResponse}
+import org.elasticsearch.action.index.IndexRequest
 import org.elasticsearch.client.{RequestOptions, RestClient, RestHighLevelClient}
 import org.elasticsearch.common.xcontent.XContentType
 import org.slf4j.LoggerFactory
@@ -22,7 +24,7 @@ import scala.collection.JavaConverters
   * You can check the result of an app via Kafka rest API: [[http://localhost:9200/tweets/]].
   * All the indices are at [[http://localhost:9200/_cat/indices?v]].
   */
-object ElasticConsumerApp extends App with Runnable with ActionListener[IndexResponse] {
+object ElasticConsumerApp extends App with Runnable {
 
   val log = LoggerFactory.getLogger("consumer-app")
   val latch: CountDownLatch = new CountDownLatch(1) // latch for dealing with multiple threads
@@ -54,7 +56,7 @@ object ElasticConsumerApp extends App with Runnable with ActionListener[IndexRes
   }
 
   private def createKafkaConsumer() = {
-    // CSSreate consumer configs
+    // Create consumer configs
     val properties = new Properties()
     properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, AppConstants.bootstrapServers)
     properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, classOf[StringDeserializer].getName)
@@ -133,16 +135,6 @@ object ElasticConsumerApp extends App with Runnable with ActionListener[IndexRes
     val result = elasticClient.bulk(request, RequestOptions.DEFAULT)
     consumer.commitSync() //commit the consumer offset
     result
-  }
-
-  def onResponse(response: IndexResponse): Unit = {
-    val info = response.getShardInfo
-    log.info(s"Inserted index with id ${response.getId} ${response.getResult}. " +
-             s"Successful: ${info.getSuccessful}, failed: ${info.getFailed}, total: ${info.getTotal} ")
-  }
-
-  def onFailure(e: Exception): Unit = {
-    log.error("Failed sending index element", e)
   }
 
   start()
